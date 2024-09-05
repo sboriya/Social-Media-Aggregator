@@ -1,0 +1,48 @@
+@startuml
+' Define the controller classes
+class InfluencerController {
+    +createInfluencer(InfluencerRequestDTO)
+    +getInfluencer(Long)
+}
+class SocialMediaController {
+    +getAggregatedFeeds(Long, String)
+}
+class UserPreferenceController {
+    +createUserPreference(UserPreferenceRequestDTO)
+    +updateUserPreference(UserPreferenceRequestDTO)
+    +getUserPreference(String)
+}
+
+' Define the service classes
+class InfluencerService {
+    +createInfluencer(InfluencerRequestDTO)
+    +getInfluencer(Long)
+}
+class SocialMediaService {
+    +getAggregatedFeeds(Long, String)
+}
+class UserPreferenceService {
+    +createUserPreference(UserPreferenceRequestDTO)
+    +updateUserPreference(UserPreferenceRequestDTO)
+    +getUserPreference(String)
+}
+
+' Define the repository classes
+class InfluencerRepository {
+    +findByName(String)
+    +findById(Long)
+}
+class UserPreferenceRepository {
+    +findByUsername(String)
+}
+
+' Relationships between controller and service classes
+InfluencerController --> InfluencerService : uses
+SocialMediaController --> SocialMediaService : uses
+UserPreferenceController --> UserPreferenceService : uses
+
+' Relationships between service and repository classes
+InfluencerService --> InfluencerRepository : calls
+UserPreferenceService --> UserPreferenceRepository : calls
+
+@enduml

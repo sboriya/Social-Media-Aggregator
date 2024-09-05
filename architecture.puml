@@ -1,0 +1,121 @@
+@startuml
+' Define the controller classes with methods
+class InfluencerController {
+    +createInfluencer(InfluencerRequestDTO influencerRequest) : ResponseEntity<?>
+    +getInfluencer(Long id) : ResponseEntity<?>
+}
+
+class SocialMediaController {
+    +getAggregatedFeeds(Long userId, String platform) : SocialMediaFeedDTO
+}
+
+class UserPreferenceController {
+    +updateUserPreference(UserPreferenceRequestDTO preference) : ResponseEntity<?>
+    +createUserPreference(UserPreferenceRequestDTO preference) : ResponseEntity<?>
+    +getUserPreference(String username) : ResponseEntity<?>
+}
+
+' Define the service classes with methods
+class InfluencerService {
+    -influencerRepository : InfluencerRepository
+    +createInfluencer(InfluencerRequestDTO influencerRequestDTO) : InfluencerResponseDTO
+    +getInfluencer(Long id) : Optional<InfluencerResponseDTO>
+    -getInfluencerDetails(InfluencerRequestDTO) : Influencer
+    -getInfluencerResponseDTO(Influencer influencer) : InfluencerResponseDTO
+}
+
+class SocialMediaService {
+    +getAggregatedFeeds(Long userId, String platform) : SocialMediaFeedDTO
+}
+
+class UserPreferenceService {
+    -userPreferenceRepository : UserPreferenceRepository
+    +updateUserPreference(UserPreferenceRequestDTO preference) : UserPreferenceResponseDTO
+    +createUserPreference(UserPreferenceRequestDTO preference) : UserPreferenceResponseDTO
+    +getUserPreference(String username) : Optional<UserPreferenceResponseDTO>
+}
+
+' Define the repository classes with methods
+class InfluencerRepository {
+    +findByName(String name) : Optional<Influencer>
+    +findAllByNameIn(Set<String> strings) : Set<Influencer>
+    +findAllById(Iterable<Long> ids) : List<Influencer>
+}
+
+class UserPreferenceRepository {
+    +findByUsername(String username) : Optional<UserPreference>
+}
+
+' Entity classes
+class Influencer {
+    +id : Long
+    +name : String
+    +facebookUrl : String
+    +instagramUrl : String
+    +twitterUrl : String
+    +yahooUrl : String
+    +category : String
+}
+
+class UserPreference {
+    +id : Long
+    +username : String
+    +theme : String
+    +selectedPlatforms : List<String>
+}
+
+class SocialMediaFeedDTO {
+    +posts : List<String>
+    +platform : String
+}
+
+class InfluencerRequestDTO {
+    +name : String
+    +facebookUrl : String
+    +instagramUrl : String
+    +twitterUrl : String
+    +yahooUrl : String
+    +category : String
+}
+
+class InfluencerResponseDTO {
+    +id : Long
+    +name : String
+    +facebookUrl : String
+    +instagramUrl : String
+    +twitterUrl : String
+    +yahooUrl : String
+    +category : String
+}
+
+class UserPreferenceRequestDTO {
+    +username : String
+    +theme : String
+    +selectedPlatforms : List<String>
+}
+
+class UserPreferenceResponseDTO {
+    +userId : Long
+    +username : String
+    +theme : String
+    +selectedPlatforms : List<String>
+}
+
+class ErrorResponseDTO {
+    +message : String
+}
+
+' Relationships
+InfluencerController --> InfluencerService : uses
+SocialMediaController --> SocialMediaService : uses
+UserPreferenceController --> UserPreferenceService : uses
+
+InfluencerService --> InfluencerRepository : calls
+UserPreferenceService --> UserPreferenceRepository : calls
+
+InfluencerService --> Influencer : manages
+UserPreferenceService --> UserPreference : manages
+InfluencerResponseDTO --> Influencer : converts
+UserPreferenceResponseDTO --> UserPreference : converts
+
+@enduml
